@@ -1,5 +1,5 @@
 CFLAGS = -Wall -g
-PYTHON = python3.9
+PYTHON = python3.6
 
 .DEFAULT_GOAL: all
 
@@ -8,7 +8,7 @@ PYTHON = python3.9
 all: main
 
 main: main.o
-	gcc main.o -o main -l$(PYTHON)
+	gcc main.o -o main -l$(PYTHON)m
 
 main.o: main.c
 	gcc -I/usr/include/$(PYTHON)/ -c main.c -o main.o

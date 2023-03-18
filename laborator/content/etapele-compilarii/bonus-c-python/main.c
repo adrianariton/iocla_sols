@@ -7,7 +7,7 @@ int main(void)
 	PyObject *pValue;
 
 	char *msg = "Hello World!";
-
+	char *fnd = "Wor";
 	setenv("PYTHONPATH", "./python_modules", 1);
 
 	Py_Initialize();
@@ -20,7 +20,7 @@ int main(void)
 	pModule = PyImport_Import(pModuleName);
 
 	if (pModule != NULL) {
-		pythonArgument = PyTuple_New(1);
+		pythonArgument = PyTuple_New(2);
 		if (pythonArgument == NULL) {
 			fprintf(stderr, "pythonArgument is null.\n");
 			return 0;
@@ -37,7 +37,19 @@ int main(void)
 			return 0;
 		}
 
-		pFunc = PyObject_GetAttrString(pModule, "say");
+
+		pValue = PyUnicode_DecodeFSDefault(fnd);
+		if (pValue == NULL) {
+			fprintf(stderr, "pValue is null.\n");
+			return 0;
+		}
+
+		if (PyTuple_SetItem(pythonArgument, 1, pValue) < 0) {
+			fprintf(stderr, "PyTuple_SetItem failed.\n");
+			return 0;
+		}
+
+		pFunc = PyObject_GetAttrString(pModule, "py_find");
 		if (pFunc == NULL) {
 			fprintf(stderr, "pFunc is null.\n");
 			return 0;
@@ -51,6 +63,7 @@ int main(void)
 		 *  TODO - Apelați funcția creată de voi din modulul my_module.py
 		 *  și afișați un mesaj corespunzător în funcție de rezultat.
 		 */
+
 	} else {
 		fprintf(stderr, "pModule is null.\n");
 		return 0;
